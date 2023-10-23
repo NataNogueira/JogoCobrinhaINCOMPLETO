@@ -69,30 +69,21 @@ def tela_perdeu(pontuacao, recorde):
     texto_perdeu = fonte.render("Você Perdeu!", True, vermelho)
     texto_pontuacao = fonte.render(f"Pontuação: {pontuacao}", True, branca)
     texto_recorde = fonte.render(f"Recorde Pessoal: {recorde}", True, branca)
-    texto_instrucao = fonte.render("Pressione 'M' para voltar ao Menu Inicial ou 'Esc' para sair", True, branca)
+    texto_menu = fonte.render("Pressione 'M' para voltar ao Menu Inicial", True, branca)
+    largura_texto = max(texto_perdeu.get_width(), texto_pontuacao.get_width(), texto_recorde.get_width(), texto_menu.get_width())
+    pos_x = largura // 2 - largura_texto // 2
 
-    largura_texto = max(texto_perdeu.get_width(), texto_pontuacao.get_width(), texto_recorde.get_width(), texto_instrucao.get_width())
-    pos_x = (largura - largura_texto) // 2
-    pos_y_perdeu = (altura // 2) - 50
-    pos_y_pontuacao = (altura // 2)
-    pos_y_recorde = (altura // 2) + 50
-    pos_y_instrucao = (altura // 2) + 100
-
-    tela.blit(texto_perdeu, [pos_x, pos_y_perdeu])
-    tela.blit(texto_pontuacao, [pos_x, pos_y_pontuacao])
-    tela.blit(texto_recorde, [pos_x, pos_y_recorde])
-    tela.blit(texto_instrucao, [pos_x, pos_y_instrucao])
+    tela.blit(texto_perdeu, [pos_x, altura // 2 - 100])
+    tela.blit(texto_pontuacao, [pos_x, altura // 2 - 30])
+    tela.blit(texto_recorde, [pos_x, altura // 2 + 40])
+    tela.blit(texto_menu, [pos_x, altura // 2 + 110])
     pygame.display.update()
-
+    
     while True:
         for evento in pygame.event.get():
             if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_m:
                     return
-                elif evento.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    sys.exit()
-                    
 
 def rodar_jogo(recorde_pessoal, ilimitado):
     fim_jogo = False
@@ -109,7 +100,8 @@ def rodar_jogo(recorde_pessoal, ilimitado):
         tela.fill(preto)
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
-                fim_jogo = True
+                pygame.quit()
+                sys.exit()
             elif evento.type == pygame.KEYDOWN:
                 velocidade_x, velocidade_y, direcao_atual = selecionar_velocidade(evento.key, velocidade_x, velocidade_y, direcao_atual)
 
@@ -120,9 +112,19 @@ def rodar_jogo(recorde_pessoal, ilimitado):
         x += velocidade_x
         y += velocidade_y
 
-        # Verificar colisão com a parede
-        if x < 0 or x >= largura or y < 0 or y >= altura:
-            fim_jogo = True
+        # Verificar colisão com a parede (modo ilimitado)
+        if ilimitado:
+            if x >= largura:
+                x = 0
+            elif x < 0:
+                x = largura - tamanho_quadrado
+            if y >= altura:
+                y = 0
+            elif y < 0:
+                y = altura - tamanho_quadrado
+        else:
+            if x < 0 or x >= largura or y < 0 or y >= altura:
+                fim_jogo = True
 
         # Verificar colisão com o corpo da cobra
         if colisao_corpo(x, y, pixels):
@@ -181,6 +183,7 @@ def menu_inicial(recorde_pessoal):
                     sys.exit()
     return opcao_selecionada
 
+recorde_pessoal = 0  # Inicialize o recorde pessoal como 0
 modo_selecionado = menu_inicial(recorde_pessoal)
 while True:
     if modo_selecionado == '1':
