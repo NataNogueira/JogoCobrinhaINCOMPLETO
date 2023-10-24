@@ -155,39 +155,4 @@ def rodar_jogo(recorde_pessoal, ilimitado):
 
     tela_perdeu(tamanho_cobra - 1, recorde_pessoal)
 
-def menu_inicial(recorde_pessoal):
-    tela.fill(preto)
-    fonte = pygame.font.SysFont("Helvetica", 50)
-    texto_titulo = fonte.render("Snake Game", True, vermelho)
-    texto_opcoes = fonte.render("Selecione uma opção:", True, branca)
-    texto_ilimitado = fonte.render("1 - Modo Ilimitado", True, branca)
-    texto_limitado = fonte.render("2 - Modo Limitado", True, branca)
-    
-    largura_texto = max(texto_titulo.get_width(), texto_opcoes.get_width(), texto_ilimitado.get_width(), texto_limitado.get_width())
-    pos_x = largura // 2 - largura_texto // 2
-
-    tela.blit(texto_titulo, [pos_x, altura // 2 - 100])
-    tela.blit(texto_opcoes, [pos_x, altura // 2 - 30])
-    tela.blit(texto_ilimitado, [pos_x, altura // 2 + 30])
-    tela.blit(texto_limitado, [pos_x, altura // 2 + 70])
-    pygame.display.update()
-    
-    opcao_selecionada = None
-    while opcao_selecionada not in ('1', '2'):
-        for evento in pygame.event.get():
-            if evento.type == pygame.KEYDOWN:
-                if evento.unicode in ('1', '2'):
-                    opcao_selecionada = evento.unicode
-                elif evento.key == pygame.K_q:
-                    pygame.quit()
-                    sys.exit()
-    return opcao_selecionada
-
-recorde_pessoal = 0  # Inicialize o recorde pessoal como 0
-modo_selecionado = menu_inicial(recorde_pessoal)
-while True:
-    if modo_selecionado == '1':
-        recorde_pessoal = rodar_jogo(recorde_pessoal, True)
-    elif modo_selecionado == '2':
-        recorde_pessoal = rodar_jogo(recorde_pessoal, False)
-    modo_selecionado = menu_inicial(recorde_pessoal)
+    return recorde_pessoal
