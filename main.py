@@ -1,3 +1,4 @@
+# Importando Bibliotecas
 import pygame
 import random
 import sys
@@ -6,7 +7,7 @@ import sys
 pygame.init()
 
 pygame.display.set_caption("Snake Game")
-largura, altura = 800, 600
+largura, altura = 600, 400
 tela = pygame.display.set_mode((largura, altura))
 relogio = pygame.time.Clock()
 
@@ -23,7 +24,7 @@ velocidade_jogo = 15
 # Variável de recorde pessoal
 recorde_pessoal = 0
 
-# Funções para rodar o jogo
+# Função comida
 def gerar_comida(pixels, ilimitado):
     if ilimitado:
         comida_x = round(random.randrange(0, largura - tamanho_quadrado) // tamanho_quadrado) * tamanho_quadrado
@@ -34,18 +35,22 @@ def gerar_comida(pixels, ilimitado):
     if [comida_x, comida_y] not in pixels:
         return comida_x, comida_y
 
+# Função comida 2 (parâmetros)
 def desenhar_comida(tamanho, comida_x, comida_y):
     pygame.draw.rect(tela, verde, [comida_x, comida_y, tamanho, tamanho])
 
+# Função cobra (parâmetros)
 def desenhar_cobra(tamanho, pixels):
     for pixel in pixels:
         pygame.draw.rect(tela, branca, [pixel[0], pixel[1], tamanho, tamanho])
 
+# Função Score
 def desenhar_pontuacao(pontuacao, recorde):
-    fonte = pygame.font.SysFont("Helvetica", 35)
-    texto_pontuacao = fonte.render(f"Pontuação: {pontuacao}", True, vermelho)
+    fonte = pygame.font.SysFont("Helvetica", 20)
+    texto_pontuacao = fonte.render(f"Score: {pontuacao}", True, vermelho)
     tela.blit(texto_pontuacao, [1, 1])
 
+# Função Velocidade
 def selecionar_velocidade(tecla, velocidade_x, velocidade_y, direcao_atual):
     if tecla == pygame.K_DOWN and direcao_atual != 'up':
         return 0, tamanho_quadrado, 'down'
@@ -63,13 +68,14 @@ def colisao_corpo(x, y, pixels):
             return True
     return False
 
+# Tela que remete ao fim do game
 def tela_perdeu(pontuacao, recorde):
     tela.fill(preto)
-    fonte = pygame.font.SysFont("Helvetica", 50)
-    texto_perdeu = fonte.render("Você Perdeu!", True, vermelho)
-    texto_pontuacao = fonte.render(f"Pontuação: {pontuacao}", True, branca)
-    texto_recorde = fonte.render(f"Recorde Pessoal: {recorde}", True, branca)
-    texto_menu = fonte.render("Pressione 'M' para voltar ao Menu Inicial", True, branca)
+    fonte = pygame.font.SysFont("Helvetica", 40)
+    texto_perdeu = fonte.render("You Lose!", True, vermelho)
+    texto_pontuacao = fonte.render(f"Score: {pontuacao}", True, branca)
+    texto_recorde = fonte.render(f"High Score: {recorde}", True, branca)
+    texto_menu = fonte.render("Press 'M' to back for Main Menu", True, branca)
     largura_texto = max(texto_perdeu.get_width(), texto_pontuacao.get_width(), texto_recorde.get_width(), texto_menu.get_width())
     pos_x = largura // 2 - largura_texto // 2
 
@@ -85,13 +91,14 @@ def tela_perdeu(pontuacao, recorde):
                 if evento.key == pygame.K_m:
                     return
 
+# Função responsável por rodar o jogo
 def rodar_jogo(recorde_pessoal, ilimitado):
     fim_jogo = False
     x = largura // 2
     y = altura // 2
     velocidade_x = 0
     velocidade_y = 0
-    direcao_atual = 'right'
+    direcao_atual = ""
     tamanho_cobra = 1
     pixels = []
     comida_x, comida_y = gerar_comida(pixels, ilimitado)
