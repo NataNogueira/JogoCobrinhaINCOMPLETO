@@ -4,6 +4,7 @@ import pygame
 import sys
 import tkinter as tk
 
+
 # Iniciando o PyGame
 pygame.init()
 
@@ -22,9 +23,32 @@ verde = (0, 255, 0)
 # Janela de aviso do modo 2
 def alerta():
     janela_alerta = tk.Tk()
-    janela_alerta.geometry("200x100")
-    tk.Label(janela_alerta, text="Atenção! Nesse modo, as paredes também serão inimigas.").pack()
+    janela_alerta.title("Aviso")  # Altera o nome da janela para "Aviso"
+    janela_alerta.geometry("300x100")
+    
+    # Desativa o botão de maximizar
+    janela_alerta.resizable(False, False)
+    
+    # Substitui a ação do botão de fechar por uma função vazia
+    janela_alerta.protocol("WM_DELETE_WINDOW", lambda: None)
+    
+    # Calcula a posição da janela para centralizá-la
+    largura_tela = janela_alerta.winfo_screenwidth()
+    altura_tela = janela_alerta.winfo_screenheight()
+    pos_x = largura_tela // 2 - 300 // 2
+    pos_y = altura_tela // 2 - 100 // 2
+    janela_alerta.geometry(f"+{pos_x}+{pos_y}")
+    
+    # Adiciona quebras de linha para tornar o texto mais legível
+    texto = "Atenção!\nNesse modo, as paredes\n também serão inimigas."
+    tk.Label(janela_alerta, text=texto, justify='center').pack()
+    
+    # Cria um botão OK que destrói a janela quando clicado
     tk.Button(janela_alerta, text="OK", command=janela_alerta.destroy).pack()
+    
+    # Faz a janela ficar em cima de todas as outras e aguarda até ser destruída
+    janela_alerta.attributes('-topmost', True)
+    
     janela_alerta.mainloop()
 
 # Função condicional para o usuário escolher a dificuldade do jogo
@@ -75,7 +99,6 @@ while True:
         recorde_pessoal = main.rodar_jogo(recorde_pessoal, True)
     elif modo_selecionado == '2':
         alerta()
-        print("Nesse modo, as paredes também serão inimigas.")
         recorde_pessoal = main.rodar_jogo(recorde_pessoal, False)
     modo_selecionado = menu_inicial(recorde_pessoal)
 
