@@ -14,8 +14,21 @@ Este é um projeto retrô básico bastante conhecido como Snake Game. Um jogo an
 - __Recorde__: Registra a maior pontuação alcançada durante todas as sessões de jogo.
 
 ## Como jogar 🚧
+Para jogar clone este repositório e rode o código "menu.py" presente na pasta Scripts. Bom Jogo!!
+
+__Observação:__
+O arquivo ".exe" do jogo ainda está em fase de teste. Aconselho a rodar o jogo e instalar as bibliotecas necessarias dentro de um ambiente virtual.
 
 
-## Tecnologias utilizadas 💻
-- `VS Code`
-- `Python 3`
+## Bibliotecas utilizadas 💻
+- `PyGame`
+- `Sys`
+- `Tkinter`
+
+##
+<h3 align="center">
+  <div style="display: inline_block"><br>
+    <img align="center" alt="Python" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg">
+  </div>
+</h3>
+
